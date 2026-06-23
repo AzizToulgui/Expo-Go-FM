@@ -1,12 +1,53 @@
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, TextInput, View } from "react-native";
 import { ShoppingListItem } from "../components/shoppingListItem";
+import { theme } from "../theme";
+import { useState } from "react";
+
+type ShoppingListItemType = {
+  id: string;
+  name: string;
+  isCompleted: boolean;
+};
+
+const initialShoppingList: ShoppingListItemType[] = [
+  { id: "1", name: "Coffee", isCompleted: false },
+  { id: "2", name: "Tee", isCompleted: true },
+  { id: "3", name: "Sugar", isCompleted: false },
+];
 
 export default function App() {
+  const [inputValue, setInputValue] = useState("");
+  const [shoppingList, setShoppingList] =
+    useState<ShoppingListItemType[]>(initialShoppingList);
+
+  const handleSubmit = () => {
+    if (inputValue) {
+      const newShoppingList = [
+        { id: new Date().toTimeString(), name: inputValue, isCompleted: false },
+        ...shoppingList,
+      ];
+      setShoppingList(newShoppingList);
+      setInputValue("");
+    }
+  };
+
   return (
     <View style={styles.container}>
-      <ShoppingListItem name="Coffee" />
-      <ShoppingListItem name="Tee" isCompleted />
-      <ShoppingListItem name="Sugar" />
+      <TextInput
+        style={styles.textInput}
+        placeholder="Add a new item..."
+        value={inputValue}
+        onChangeText={setInputValue}
+        returnKeyType="done"
+        onSubmitEditing={handleSubmit}
+      />
+      {shoppingList.map((item) => (
+        <ShoppingListItem
+          key={item.id}
+          name={item.id}
+          isCompleted={item.isCompleted}
+        />
+      ))}
     </View>
   );
 }
@@ -15,6 +56,15 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    justifyContent: "center",
+    paddingTop: 12,
+  },
+  textInput: {
+    borderColor: theme.colorLightGray,
+    borderWidth: 2,
+    padding: 12,
+    marginHorizontal: 12,
+    marginBottom: 12,
+    fontSize: 18,
+    borderRadius: 50,
   },
 });
