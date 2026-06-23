@@ -1,5 +1,5 @@
 import { StyleSheet, Text, TouchableOpacity, View, Alert } from "react-native";
-import { ShoppingListItem } from "./components/shoppingListItem";
+import { ShoppingListItem } from "../components/shoppingListItem";
 
 export default function App() {
   return (
